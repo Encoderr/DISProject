@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: todos
+Version: 1.0.0
+Summary: A minimal todo application for the DIS 2025 course.
+Requires-Dist: flask==3.1.1
+Requires-Dist: psycopg2==2.9.10

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spotify Songs Analysis</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        .filter-section { margin: 20px 0; display: flex; gap: 20px; align-items: center; }
+        .search-box { padding: 5px; width: 200px; }
+        .filter-box { padding: 5px; }
+        button { padding: 5px 10px; cursor: pointer; }
+        .clear-filters { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Music Emotions Database</h1>
+    
+    <div class="filter-section">
+        <form method="GET" id="searchForm">
+            <input type="text" name="search" placeholder="Search songs or artists..." 
+                   class="search-box" value="{{ search }}">
+            
+            <select name="emotion" class="filter-box">
+                <option value="">All Emotions</option>
+                {% for emotion in emotions %}
+                <option value="{{ emotion }}" {% if emotion == selected_emotion %}selected{% endif %}>
+                    {{ emotion }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="genre" class="filter-box">
+                <option value="">All Genres</option>
+                {% for genre in genres %}
+                <option value="{{ genre }}" {% if genre == selected_genre %}selected{% endif %}>
+                    {{ genre }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="sort" class="filter-box">
+                <option value="artist" {% if sort == 'artist' %}selected{% endif %}>Sort by Artist</option>
+                <option value="title" {% if sort == 'title' %}selected{% endif %}>Sort by Title</option>
+                <option value="year" {% if sort == 'year' %}selected{% endif %}>Sort by Year</option>
+                <option value="tempo" {% if sort == 'tempo' %}selected{% endif %}>Sort by Tempo</option>
+            </select>
+
+            <button type="submit">Apply Filters</button>
+            <button type="button" class="clear-filters" onclick="window.location.href='/songs'">Clear All</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>Artist</th>
+            <th>Title</th>
+            <th>Emotion</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Key</th>
+            <th>Tempo</th>
+        </tr>
+        {% for song in songs %}
+        <tr>
+            <td>{{ song.artist }}</td>
+            <td>{{ song.title }}</td>
+            <td>{{ song.emotion }}</td>
+            <td>{{ song.genre }}</td>
+            <td>{{ song.year }}</td>
+            <td>{{ song.key }}</td>
+            <td>{{ song.tempo }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="pagination">
+        {% if current_page > 1 %}
+            <a href="?page={{ current_page - 1 }}{% if search %}&search={{ search }}{% endif %}{% if emotion %}&emotion={{ emotion }}{% endif %}{% if genre %}&genre={{ genre }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">Previous</a>
+        {% endif %}
+        
+        Page {{ current_page }} of {{ total_pages }}
+        
+        {% if current_page < total_pages %}
+            <a href="?page={{ current_page + 1 }}{% if search %}&search={{ search }}{% endif %}{% if emotion %}&emotion={{ emotion }}{% endif %}{% if genre %}&genre={{ genre }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">Next</a>
+        {% endif %}
+    </div>
+</body>
+</html>
